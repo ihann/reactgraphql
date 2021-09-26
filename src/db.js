@@ -3,7 +3,7 @@ const github = {
     username: "ihann",
     headers: {
         "Content-Type": "application/json",
-        Authorization: "bearer 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"
+        Authorization: "bearer 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"
     }
 };
 

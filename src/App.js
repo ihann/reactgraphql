@@ -1,9 +1,11 @@
 import github from "./db";
 import {useEffect, useState, useCallback} from "react";
 import query from "./Qeury";
+import RepoInfo from "./RepoInfo";
 
 function App() {
     let [userName, setUserName] = useState("");
+    let [repoLists, setRepoLists] = useState(null);
 
     const fetchData = useCallback(() => {
         fetch(github.baseUrl, {
@@ -14,8 +16,10 @@ function App() {
         })
             .then((response) => response.json())
             .then(data => {
-                setUserName(data.data.viewer.name);
-                console.log(data)
+                let viewer = data.data.viewer;
+                let repos = data.data.search.nodes
+                setUserName(viewer.name);
+                setRepoLists(repos)
             })
             .catch(error => {
                 console.log(error);
@@ -32,6 +36,14 @@ function App() {
         <div className="App container mt-5">
             <h1 className="text-primary"><i className="bi bi-diagram-2-fill"></i></h1>
             <p>Hey there {userName}</p>
+
+            {repoLists && (
+                <ul className="list-group list-group-flush">
+                    {repoLists.map((repo) => (
+                        <RepoInfo key={repo.id} repo={repo}/>
+                    ))}
+                </ul>
+            )}
         </div>
     );
 }
